@@ -1,16 +1,15 @@
 import React from 'react';
 import {
-  View,
-  ImageBackground,
   Image,
-  StyleSheet,
-  useWindowDimensions,
-  Text,
   Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import useOrientation from '../common/hooks/Orientation';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
 const SigninScreen = props => {
   // Props Variables
@@ -48,6 +47,7 @@ const SigninScreen = props => {
           }}
         />
       </View>
+
       <View
         style={[
           styles.backgroundImage,
@@ -103,13 +103,12 @@ const SigninScreen = props => {
             }}>
             Sign in
           </Text>
-          {/* <View>
-            <TextInput
-              label="Password"
-              secureTextEntry
-              left={<TextInput.Icon icon="eye" />}
-            />
-          </View> */}
+
+          <TextInput
+            label="Password"
+            secureTextEntry
+            left={<TextInput.Icon icon="eye" />}
+          />
 
           <Button
             mode="contained"

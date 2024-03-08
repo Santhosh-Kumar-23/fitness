@@ -1,22 +1,18 @@
-import {useEffect, useRef, useState, useCallback} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Image,
   useWindowDimensions,
-  BackHandler,
-  Alert,
 } from 'react-native';
-import {Button} from 'react-native-paper';
-import useOrientation from '../common/hooks/Orientation';
 import useNetworkStatus from '../common/hooks/Network';
-import {useFocusEffect} from '@react-navigation/native';
+import useOrientation from '../common/hooks/Orientation';
 // import * as commonStyles from '../common/styles'
-import {buttonStyles, cardStyles} from '../common/styles';
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {Button} from 'react-native-paper';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 const App = props => {
   // Props Variables
@@ -28,10 +24,9 @@ const App = props => {
   // Hooks Variables
   const orientation = useOrientation();
   const {isConnected, networkType} = useNetworkStatus();
-  // console.log('isConnected', isConnected);
-  // console.log('NetworkType', networkType);
+
   const scrollViewRef = useRef(null);
-  const {width} = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
 
   // console.log('orientation::: ', orientation);
 
@@ -167,7 +162,6 @@ const App = props => {
             width,
             flex: 1,
             justifyContent: 'flex-end',
-            backgroundColor: '#010A0D',
           }}
           key={index}>
           <View style={styles.wrapper}>
@@ -224,71 +218,92 @@ const App = props => {
         props.navigation.navigate('GetStarted');
 
       default:
-        scrollViewRef.current.scrollTo({
-          x:
-            (scrollIndex || scrollIndex == 0 ? scrollIndex : pageIndex) * width,
-          animated: false,
-        });
+        // scrollViewRef.current.scrollTo({
+        //   x:
+        //     (scrollIndex || scrollIndex == 0 ? scrollIndex : pageIndex) * width,
+        //   animated: false,
+        // });
         break;
     }
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#010A0D',
-      }}>
-      {renderBackSkipButtons()}
-      {renderIntroSliders()}
-      <View style={{paddingHorizontal: 20}}>
-        <Button
-          icon={require('../assets/b1.png')}
-          mode="contained"
-          textColor="#010A0D"
-          labelStyle={{
-            fontSize: RFPercentage(1.65),
-            fontWeight: '400',
-            fontFamily: 'Roboto-Regular',
-          }}
-          contentStyle={{
-            flexDirection: 'row-reverse',
-            paddingHorizontal: 20,
-            paddingVertical: RFPercentage(0.5),
-          }}
+    <View style={styles.container}>
+      <View
+        style={{
+          width,
+          height,
+        }}>
+        <Image
+          resizeMode="center"
+          source={require('../assets/f4.png')}
           style={{
-            backgroundColor: '#B4E13F',
-            borderRadius: 50,
+            width,
+            height: height,
           }}
-          onPress={() => {
-            handleSlider('INC'); // Change 200 to the desired position
-          }}>
-          Next
-        </Button>
+        />
       </View>
-      <View style={[styles.paginationWrapper]}>
-        {Array.from(Array(4).keys()).map((_key, index) => (
-          <Pressable
-            onPress={() => {
-              handleSlider(null, index);
-            }}
-            style={[
-              styles.paginationDots,
-              {
-                opacity: pageIndex >= index ? 1 : 0.2,
-                borderColor:
-                  pageIndex != index
-                    ? pageIndex >= index
-                      ? 'white'
-                      : 'white'
-                    : 'transparent',
-                borderWidth: 1.75,
-              },
-              pageIndex == index && {width: 40},
-            ]}
-            key={index}
-          />
-        ))}
+      <View
+        style={[
+          styles.backgroundImage,
+          {flex: 1, justifyContent: 'space-between'},
+        ]}>
+        <View
+          style={{
+            flex: 1,
+          }}>
+          {renderBackSkipButtons()}
+          {renderIntroSliders()}
+          <View style={{paddingHorizontal: 20}}>
+            <Button
+              icon={require('../assets/b1.png')}
+              mode="contained"
+              textColor="#010A0D"
+              labelStyle={{
+                fontSize: RFPercentage(1.65),
+                fontWeight: '400',
+                fontFamily: 'Roboto-Regular',
+              }}
+              contentStyle={{
+                flexDirection: 'row-reverse',
+                paddingHorizontal: 20,
+                paddingVertical: RFPercentage(0.5),
+              }}
+              style={{
+                backgroundColor: '#B4E13F',
+                borderRadius: 50,
+              }}
+              onPress={() => {
+                handleSlider('INC'); // Change 200 to the desired position
+              }}>
+              Next
+            </Button>
+          </View>
+          <View style={[styles.paginationWrapper]}>
+            {Array.from(Array(4).keys()).map((_key, index) => (
+              <Pressable
+                onPress={() => {
+                  handleSlider(null, index);
+                }}
+                style={[
+                  styles.paginationDots,
+                  {
+                    opacity: pageIndex >= index ? 1 : 0.2,
+                    borderColor:
+                      pageIndex != index
+                        ? pageIndex >= index
+                          ? 'white'
+                          : 'white'
+                        : 'transparent',
+                    borderWidth: 1.75,
+                  },
+                  pageIndex == index && {width: 40},
+                ]}
+                key={index}
+              />
+            ))}
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -315,7 +330,6 @@ const styles = StyleSheet.create({
     lineHeight: RFPercentage(2.3),
   },
   paginationWrapper: {
-    backgroundColor: '#010A0D',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -327,6 +341,17 @@ const styles = StyleSheet.create({
     borderRadius: 10 / 2,
     backgroundColor: '#B4E13F',
     marginLeft: 10,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#010A0D',
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
+  overlayContainer: {
+    backgroundColor: 'black',
   },
 });
 
